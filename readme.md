@@ -4,6 +4,7 @@
 ### windows平台部署
 1. 安装cmake以及cppan、并将他们加入环境变量
 2. 在tesseract源文件目录运行cppan
+![](https://github.com/Fanglouhao/cv_project/blob/master/pngForMd/win1.png)
 3. 运行cmake，如图存放source code的目录为“E:/cv/sources”，存放build的结果的目录为“E:/cv/build”，将（Name，Value）对中的CMAKE\_INSTALL\_PREFIX设置为“E：/cv/install”用以表示生成可执行文件的目录。
 4. 打开build目录中的tesseract.sln，在vs2017打开项目，解决方案如图
 5. 生成ALL_BUILD，编译生成debug版本库或release库本库。如图为“E:/cv/build/bin/Debug”目录下的内容。
