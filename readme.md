@@ -52,7 +52,11 @@
 
 ![](https://github.com/Fanglouhao/cv_project/blob/master/pngForMd/win13.png)
 
+用于文字识别的图片
+
 ![](https://github.com/Fanglouhao/cv_project/blob/master/pngForMd/win14.png)
+
+生成的txt文件
 
 ![](https://github.com/Fanglouhao/cv_project/blob/master/pngForMd/win15.png)
 
