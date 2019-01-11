@@ -133,6 +133,8 @@ if __name__ == '__main__':
 4. 打开jTessBoxEditor，通过Tools>Merge TIFF将5个.tif文件merge为一个文件,将该文件命名为eng2.haha.exp0.tif，其中eng2为需要识别的语言（为与tesseract
 中自带的eng做区分命名为eng2），haha表示字体。
 
+![](https://github.com/Fanglouhao/cv_project/blob/master/pngForMd/train1.png)
+
 5. 运行以下命令，通过初步识别，生成.box文件
 
 ```
