@@ -97,3 +97,88 @@ sudo make install
 2. tesseract源文件以UTF-8编码，而系统语言为中文的win10下的vs编码格式为GB2312，则需要通过文本编辑其另存为的方法改变“E:/cv/sources/ccmain/equationdetect.cpp”的编码格式，这样才能通过编译。
 
 3. mac os平台下的部署与安装较windows平台下的简单许多。
+
+## part2 训练tesseract，识别老师提供的图片
+
+1. 采用jTessBoxEditor来编辑训练用的.box文件，为满足jTessBoxEditor的要求，将提供的.bmp图像文件转化为.tif文件。
+
+2. 编写Python脚本inverse_up_down.py, 实现对部分颠倒文件的倒置，代码如下：
+
+```
+import cv2
+import numpy as np
+import sys
+
+
+def main():
+    if len(sys.argv) == 1 or sys.argv[1][-3:-1] + sys.argv[1][-1] != "tif":
+        print("require a tif file")
+        return
+    filename = sys.argv[1]
+    bmp = cv2.imread(filename, 0)
+    row, col = bmp.shape
+    bmp_inverse = np.zeros_like(bmp)
+    for r in range(row):
+        for l in range(col):
+            bmp_inverse[r, l] = bmp[row - r - 1, l]
+    cv2.imwrite(filename[:-4] + "_inverse_up_down.tif", bmp_inverse)
+
+
+if __name__ == '__main__':
+    main()
+```
+
+3. 将5个.tif文件放大为640*480，方便tesseract-ocr的识别，以及jTessBoxEditor中对box的框选
+
+4. 打开jTessBoxEditor，通过Tools>Merge TIFF将5个.tif文件merge为一个文件,将该文件命名为eng2.haha.exp0.tif，其中eng2为需要识别的语言（为与tesseract
+中自带的eng做区分命名为eng2），haha表示字体。
+
+5. 运行以下命令，通过初步识别，生成.box文件
+
+```
+tesseract eng2.haha.exp0.tif eng2.haha.exp0 batch.nochop makebox
+```
+
+6. 在jTessBoxEditor中打开eng2.haha.exp0.tif，eng2.haha.exp0.box会被自动打开
+
+7. 编辑eng2.haha.exp0.box，使得一个box中的图像对应正确的value。
+
+8. 定义字体配置文件font_properties.txt，内容为
+
+```
+haha 0 0 0 0 0  
+```
+
+9. 执行以下命令，将最后生成的eng2.traineddata复制到tessdata目录下，即完成了训练
+
+```
+tesseract.exe eng2.haha.exp0.tif eng2.haha.exp0 nobatch box.train
+```
+
+```
+unicharset_extractor.exe eng2.haha.exp0.box
+```
+
+```
+mftraining -F font_properties -U unicharset -O eng2.unicharset eng2.haha.exp0.tr
+```
+
+```
+cntraining.exe eng2.haha.exp0.tr
+```
+
+```
+rename normproto eng2.normproto 
+rename inttemp eng2.inttemp 
+rename pffmtable eng2.pffmtable 
+rename shapetable eng2.shapetable 
+```
+
+```
+combine_tessdata.exe eng2.
+```
+
+10. 测试结果
+
+
+
